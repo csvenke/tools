@@ -4,7 +4,7 @@ pkgs.writeShellApplication {
   name = "github-release";
   runtimeInputs = with pkgs; [ git semantic-release ];
   text = ''
-    main_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+    main_branch=$(git remote show origin | grep "HEAD branch:" | sed "s/HEAD branch://" | tr -d " \t\n\r")
 
     semantic-release \
       --branch "$main_branch" \
