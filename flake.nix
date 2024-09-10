@@ -18,6 +18,7 @@
           dev = callPackage ./tools/dev { };
           dotnet-run = callPackage ./tools/dotnet-run { };
           npm-run = callPackage ./tools/npm-run { };
+          format = callPackage ./tools/format { };
         in
         {
           packages = {
@@ -25,6 +26,7 @@
             inherit dev;
             inherit dotnet-run;
             inherit npm-run;
+            inherit format;
           };
 
           devShells = {
