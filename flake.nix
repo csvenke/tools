@@ -9,15 +9,12 @@
   outputs = inputs@{ flake-parts, nixpkgs, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.systems.flakeExposed;
-      imports = [
-        inputs.flake-parts.flakeModules.easyOverlay
-      ];
       perSystem = { config, pkgs, ... }:
         let
           inherit (builtins) attrValues;
           inherit (pkgs) callPackage;
 
-          packages = {
+          tools = {
             github-release = callPackage ./tools/github-release { };
             dev = callPackage ./tools/dev { };
             dotnet-run = callPackage ./tools/dotnet-run { };
@@ -25,20 +22,19 @@
             format = callPackage ./tools/format { };
             tmux = callPackage ./tools/tmux { };
           };
-
-          shell = pkgs.mkShell {
-            packages = attrValues packages;
-          };
         in
         {
-          overlayAttrs = {
-            inherit packages;
-          };
           packages = {
-            inherit packages;
+            inherit (tools) tmux dev;
+            default = pkgs.buildEnv {
+              name = "tools";
+              paths = attrValues tools;
+            };
           };
           devShells = {
-            default = shell;
+            default = pkgs.mkShell {
+              packages = attrValues tools;
+            };
           };
         };
     };

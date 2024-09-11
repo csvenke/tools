@@ -1,7 +1,7 @@
-{ pkgs, lib }:
+{ pkgs }:
 
 let
-  inherit (lib) pipe;
+  inherit (pkgs.lib) pipe;
   inherit (builtins) readFile toFile;
 
   prettierrc = pipe ./.prettierrc [
