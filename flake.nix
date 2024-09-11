@@ -31,8 +31,12 @@
           };
         in
         {
-          overlayAttrs = packages;
-          packages = packages;
+          overlayAttrs = {
+            inherit packages;
+          };
+          packages = {
+            inherit packages;
+          };
           devShells = {
             default = shell;
           };
